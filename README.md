@@ -72,4 +72,29 @@ print(f"Your flag is: {flag1}")
 
 
 
+An alternative is to analyze the bivariate polynomial $(2x + n_1)(n_2 - 2y) - n_1n_2$ over $\mathbb{Z}\left[n_1n_2\right], which has small roots $p, s$.
+For this, we can use [this implentation of Coppersmith for bivariate polynomials]https://github.com/ubuntor/coppersmith-algorithm/blob/main/coppersmith.sage and extract $p, s$. Note that upon analysis in the debug console, only $s$ is prime here (the approximation $p$ is only 1 off), but $s$ is all we need.
 
+```py
+n = n_1 * n_2
+X = Y = 2^500 # bounds on x0 and y0
+
+P.<x,y> = PolynomialRing(ZZ)
+pol = (2 * x + n1) * (n2 - 2 *y) - n1 * n2     # Should have a root at (x0,y0)
+
+p,s = coron(pol, X, Y, k=2, debug=True)[0] #upon analysis, s is prime and p is just 1 more than the value from the coppersmith engine
+from Crypto.Util.number import *
+if isPrime(p) or isPrime(s):
+    print("Recovered")
+
+r = n_2//s
+q = r-2
+p = n_1//q
+d_1 = pow(e, -1, (p - 1) * (q - 1))
+d_2 = pow(e, -1, (r - 1) * (s - 1))
+m_1 = str(hex(pow(c_1, d_1, n_1)))[2:]
+m_2 = str(hex(pow(c_2, d_2, n_2)))[2:]
+# print(m_1 == m_2): True
+flag1 = bytes.fromhex(m_1).decode()
+print(f"Your flag is: {flag1}")
+```
