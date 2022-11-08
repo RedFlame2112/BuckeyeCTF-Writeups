@@ -73,7 +73,7 @@ print(f"Your flag is: {flag1}")
 
 
 An alternative is to analyze the bivariate polynomial $(2x + n_1)(n_2 - 2y) - n_1n_2$ over $\mathbb{Z}\left[n_1n_2\right]$, which has small roots $p, s$.
-For this, we can use [this implentation of Coppersmith for bivariate polynomials](https://github.com/ubuntor/coppersmith-algorithm/blob/main)/coppersmith.sage and extract $p, s$. Note that upon analysis in the debug console, only $s$ is prime here (the approximation $p$ is only 1 off), but $s$ is all we need.
+For this, we can use [this implentation of Coppersmith for bivariate polynomials](https://github.com/ubuntor/coppersmith-algorithm/blob/main/coppersmith.sage) and extract $p, s$. Note that upon analysis in the debug console, only $s$ is prime here (the approximation $p$ is only 1 off), but $s$ is all we need.
 
 ```py
 from Crypto.Util.number import *
