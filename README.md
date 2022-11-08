@@ -9,7 +9,7 @@ The specs of this problem are pretty standard. Given an RSA modulus and a corres
 
 `e = 65537`
 
-However, we are also given a very useful hint: Given that R can be factored into two primes `p` and `q`, we know that these two are twin primes. Twin primes are a very special pair of odd primes such that the difference between the two are 2: the minimal distance between a pair of odd primes. These don't come up very often, but when they do, they have a lot of mathematical properties that don't make it look to good for our RSA here.
+However, we are also given a very useful hint: Given that R can be factored into two primes `p` and `q`, we know that these two are twin primes. Twin primes are a very special pair of odd primes such that the difference between the two are 2: the minimal distance between a pair of odd primes. These don't come up very often, but when they do, they have a lot of mathematical properties that don't make it look too good for our RSA here.
 
 Suppose that $p, q$ are primes such that $p = q+2$. Then because
 $n  = pq$, it follows that $n = q(q+2) = q^2 + 2q$. Therefore, we now have a univariate quadratic equation $q^2 + 2q - n = 0$. Consider the quadratic discriminant, $\Delta = 2^2 - 4*(-n)*1 = 4 + 4n$. By the Quadratic Formula, we know that the two roots to this equation are
