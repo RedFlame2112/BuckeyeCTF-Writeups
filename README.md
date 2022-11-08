@@ -9,9 +9,9 @@ The specs of this problem are pretty standard. Given an RSA modulus and a corres
 
 However, we are also given a very useful hint: Given that R can be factored into two primes `p` and `q`, we know that these two are twin primes. Twin primes are a very special pair of odd primes such that the difference between the two are 2: the minimal distance between a pair of odd primes. These don't come up very often, but when they do, they have a lot of mathematical properties that don't make it look to good for our RSA here.
 
-Suppose that $$p, q$$ are primes such that $$p = q+2$$. Then because
-$$n  = pq$$, it follows that $$n = q(q+2) = q^2 + 2q$$. Therefore, we now have a univariate quadratic equation $$q^2 + 2q - n = 0$$. Consider the quadratic discriminant, $$\Delta = 2^2 - 4*(-n)*1 = 4 + 4n$$. By the Quadratic Formula, we know that the two roots to this equation are
-$$\frac{-2 \pm \sqrt{\Delta}}{2} = \frac{-2 \pm \sqrt{4+4n}}{2} = \frac{-2 \pm 2\sqrt{n+1}}{2} = -1 \pm \sqrt{n+1}$$ and taking the absolute value of both solutions yields our two prime factors of $$n$$.
+Suppose that $p, q$ are primes such that $p = q+2$. Then because
+$n  = pq$, it follows that $n = q(q+2) = q^2 + 2q$. Therefore, we now have a univariate quadratic equation $q^2 + 2q - n = 0$. Consider the quadratic discriminant, $\Delta = 2^2 - 4*(-n)*1 = 4 + 4n$. By the Quadratic Formula, we know that the two roots to this equation are
+$\frac{-2 \pm \sqrt{\Delta}}{2} = \frac{-2 \pm \sqrt{4+4n}}{2} = \frac{-2 \pm 2\sqrt{n+1}}{2} = -1 \pm \sqrt{n+1}$ and taking the absolute value of both solutions yields our two prime factors of $n$.
 
 ```py
 # Twin Prime RSA
@@ -26,7 +26,7 @@ therefore, p^2 + 2p - n = 0
 
 The polynomial discriminant D is therefore 2^2 - 4*1*(-n) = 4 + 4n
 
-so therefore, the roots of the polynomial equation would be 
+so therefore, the roots of the polynomial equation would be
 (-2±sqrt(4+4n))//2 = (-2±2sqrt(1+n))//2 = -1 ± sqrt(n+1)
 
 and so we can set p = |sqrt(n+1)-1| and q = |-sqrt(n+1)-1|
@@ -41,14 +41,14 @@ print(f"Your flag is: {flag}")
 ```
 <details>
   <summary>Flag:</summary>
-  
+ 
  `buckeye{B3_TH3R3_OR_B3_SQU4R3__abcdefghijklmonpqrstuvwxyz__0123456789}`
-  
+ 
 </details>
 
 ### Quad Prime RSA
 
-This RSA key challenge is a fair bit harder than the last one. Instead of simply having 2 twin primes making up our modulus, we are instead given 2 different moduli ciphertext pairs, $$\langle n_1, c_1 \rangle, \langle n_2, c_2 \rangle$$, all taken with the same public exponent $$e = 65537$$. In particular, $$n_1$$ is the product of some 1024-bit prime $$q$$, and some 500-bit prime, $$p$$ while $$n_2$$ is the product of some 1024 bit prime $$r$$ and some 500-bit prime $$s$$. It's important to note that $$r$$ and $$q$$ are twin primes, namely $$r = q+2$$. So therefore, $$n_1 = pq; n_2 = (q+2)s$$. Because $$r - q = 2$$, we know that $$2p + n_1 \equiv 0 \pmod r$$. However, note that since $$2p + n_1 = 2p+pq = p(q+2) = pr$$, which obviously divides itself, it follows that $$2p + n_1 \equiv 0 \pmod {pr}$$. This is a univariate equation (monic form being $$p + n_1/2$$) which has some small root, $$p$$ modulo $$pr$$. Therefore, by Coppersmith's Theorem, it suffices to extract a small root modulo $$n_1n_2$$, the result of which will be $$p \mod {pr}$$ where $$pr$$ is a divisor of $$n_1n_2$$. It follows that $$pr \approx (n_1n_2)^{0.5}$$ and therefore, the root size $$p \approx (pr)^{0.5} \approx (n_1n_2)^{1/4} = (n_1n_2)^{\frac{0.5^2}{1}}$$ which lends us a direct application of the coppersmith method. We can use sage math's small_roots function with a beta value of 0.5 to achieve this, extracting $$p$$ and finding the flag.
+This RSA key challenge is a fair bit harder than the last one. Instead of simply having 2 twin primes making up our modulus, we are instead given 2 different moduli ciphertext pairs, $\langle n_1, c_1 \rangle, \langle n_2, c_2 \rangle$, all taken with the same public exponent $e = 65537$. In particular, $n_1$ is the product of some 1024-bit prime $q$, and some 500-bit prime, $p$ while $n_2$ is the product of some 1024 bit prime $r$ and some 500-bit prime $s$. It's important to note that $r$ and $q$ are twin primes, namely $r = q+2$. So therefore, $n_1 = pq; n_2 = (q+2)s$. Because $r - q = 2$, we know that $2p + n_1 \equiv 0 \pmod r$. However, note that since $2p + n_1 = 2p+pq = p(q+2) = pr$, which obviously divides itself, it follows that $2p + n_1 \equiv 0 \pmod {pr}$. This is a univariate equation (monic form being $p + n_1/2$) which has some small root, $p$ modulo $pr$. Therefore, by Coppersmith's Theorem, it suffices to extract a small root modulo $n_1n_2$, the result of which will be $p \mod {pr}$ where $pr$ is a divisor of $n_1n_2$. It follows that $pr \approx (n_1n_2)^{0.5}$ and therefore, the root size $p \approx (pr)^{0.5} \approx (n_1n_2)^{1/4} = (n_1n_2)^{\frac{0.5^2}{1}}$ which lends us a direct application of the coppersmith method. We can use sage math's small_roots function with a beta value of 0.5 to achieve this, extracting $p$ and finding the flag.
 
 ```py
 n_1 = 266809852588733960459210318535250490646048889879697803536547660295087424359820779393976863451605416209176605481092531427192244973818234584061601217275078124718647321303964372896579957241113145579972808278278954608305998030194591242728217565848616966569801983277471847623203839020048073235167290935033271661610383018423844098359553953309688771947405287750041234094613661142637202385185625562764531598181575409886288022595766239130646497218870729009410265665829
@@ -59,7 +59,7 @@ c_2 = 11186594438854015934468458097083544327264000963105741499571916986104159360
 P.<x> = Zmod(n_1*n_2)[] #Polynomial Integer Ring over n_1n_2
 f = 2*x + n_1
 p = int(f.monic().small_roots(X=2^500, beta=0.5)[0]) #extract p
-q = n_1//p 
+q = n_1//p
 r = q+2
 s = n_2//r
 e = 65537
@@ -75,10 +75,11 @@ print(f"Your flag is: {flag1}")
 
 <details>
   <summary>Flag:</summary>
-  
+ 
  `buckeye{I_h0p3_y0u_us3D_c0nt1nu3d_fr4ct10Ns...th4nk5_d0R5A_f0r_th3_1nsp1r4t10n}`
-  
+ 
 </details>
+
 
 
 
