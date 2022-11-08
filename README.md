@@ -1,5 +1,5 @@
 
-# Buckeye CTF 20222 Writeups
+# Buckeye CTF 2022 Writeups
 
 ### Twin Prime RSA
 The specs of this problem are pretty standard. Given an RSA modulus and a corresponding ciphertext, find the RSA key. We are given:
